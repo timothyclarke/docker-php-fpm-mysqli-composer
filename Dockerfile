@@ -2,7 +2,7 @@
 
 FROM php:7-fpm-alpine3.7
 
-RUN apk add curl --no-cache \
+RUN apk add curl fcgi --no-cache \
   && curl -sS https://getcomposer.org/installer | php \
   && chmod +x composer.phar \
   && mv composer.phar /usr/local/bin/composer
@@ -20,6 +20,8 @@ RUN apk --no-cache add --virtual .build-deps $PHPIZE_DEPS \
   && docker-php-ext-enable pdo \
   && docker-php-ext-enable pdo_mysql \
   && docker-php-source delete \
+  && curl -Lo /usr/local/bin/php-fpm-healthcheck 'https://raw.githubusercontent.com/renatomefi/php-fpm-healthcheck/master/php-fpm-healthcheck' \
+  && echo -e "pm.status_path = /status" >> /usr/local/etc/php-fpm.d/health.conf \
   && apk del .build-deps
 
 WORKDIR /var/www/html
