@@ -22,6 +22,8 @@ RUN apk --no-cache add --virtual .build-deps $PHPIZE_DEPS \
   && docker-php-source delete \
   && curl -Lo /usr/local/bin/php-fpm-healthcheck 'https://raw.githubusercontent.com/renatomefi/php-fpm-healthcheck/master/php-fpm-healthcheck' \
   && echo -e "pm.status_path = /status" >> /usr/local/etc/php-fpm.d/health.conf \
+  && echo -e "ping.path = /ping"        >> /usr/local/etc/php-fpm.d/health.conf \
+  && echo -e "ping.response = pong"     >> /usr/local/etc/php-fpm.d/health.conf \
   && chmod +x /usr/local/bin/php-fpm-healthcheck \
   && apk del .build-deps
 
